@@ -21,6 +21,7 @@ pthread_mutex_t bmutex = PTHREAD_MUTEX_INITIALIZER;
 void server_down(int signnum)
 {
     struct ChatMsg msg;
+    bzero(&msg, sizeof(msg));
     msg.type = CHAT_FIN;
     for (int i = 0; i < MAX; i++) {
         if (rteam[i].online) {
