@@ -60,6 +60,7 @@ void do_work(struct User *user)
         char buff[20] = {0};
         bzero(&msg, sizeof(msg));
         msg.type = CHAT_SYS;
+        count = 0;
         strcpy(msg.msg, "当前在线用户：\n\0");
         for (int i = 0; i < MAX; i++) {
             if (rteam[i].online) {
