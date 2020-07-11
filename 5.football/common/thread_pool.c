@@ -114,6 +114,7 @@ void do_work(struct User *user)
             msg.type = CHAT_MSG;
             strcpy(msg.name, user->name);
             strncpy(to, msg.msg + 1, i - 1);
+            printf("<"BLUE"%s"NONE"> $ %s\n", user->name, msg.msg);
             send_to(to, &msg, user->fd);
         }
     } else if (msg.type & CHAT_FIN) {
