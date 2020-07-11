@@ -85,6 +85,7 @@ struct LogResponse {
 #define CHAT_MSG 0x10 //私聊
 #define CHAT_FUNC 0x20 //功能
 #define CHAT_SYS 0x40 //系统通知信息
+#define CHAT_STA 0x80 //上线
 
 struct ChatMsg {
     int type;

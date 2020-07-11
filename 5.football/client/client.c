@@ -136,6 +136,10 @@ int main(int argc, char **argv)
     //DBG(RED"Server Info"NONE" : %s", buff);
     signal(SIGINT, logout);
     struct ChatMsg msg;
+    bzero(&msg, sizeof(msg));
+    msg.type = CHAT_STA;
+    sprintf(msg.msg, "注意：我们的好朋友 "BLUE"%s"NONE" 上线了！\n", request.name);
+    send(sockfd, (void *)&msg, sizeof(msg), 0);
     while (1) {
         bzero(&msg, sizeof(msg));
         msg.type = CHAT_WALL;

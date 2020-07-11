@@ -56,7 +56,12 @@ void do_work(struct User *user)
     bzero(&r_msg, sizeof(r_msg));
     recv(user->fd, (void *)&msg, sizeof(msg), 0);
     
-    if (msg.msg[0] == '#' && msg.msg[1] == '1') {
+    if (msg.type & CHAT_STA) {
+        printf("%s", msg.msg);
+        msg.type = CHAT_SYS;
+        strcpy(msg.name, user->name);
+        send_all(&msg);
+    } else if (msg.msg[0] == '#' && msg.msg[1] == '1') {
         char buff[20] = {0};
         bzero(&msg, sizeof(msg));
         msg.type = CHAT_SYS;
@@ -89,7 +94,7 @@ void do_work(struct User *user)
         strcat(msg.msg, buff);
         send_to(user->name, &msg, user->fd);
     } else if (msg.type & CHAT_WALL) {
-        printf("<%s> ~ %s\n", user->name ,msg.msg);
+        printf("<"BLUE"%s"NONE"> ~ %s\n", user->name ,msg.msg);
         strcpy(msg.name, user->name);
         send_all(&msg);
     } else if (msg.type & CHAT_MSG) {
