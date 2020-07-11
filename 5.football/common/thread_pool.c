@@ -57,15 +57,13 @@ void do_work(struct User *user)
     recv(user->fd, (void *)&msg, sizeof(msg), 0);
     
     if (msg.msg[0] == '#' && msg.msg[1] == '1') {
+        char buff[20] = {0};
         bzero(&msg, sizeof(msg));
         msg.type = CHAT_SYS;
+        strcpy(msg.msg, "当前在线用户：\n\0");
         for (int i = 0; i < MAX; i++) {
             if (rteam[i].online) {
-                if (count == 0) { 
-                    strcpy(msg.msg, rteam[i].name);
-                } else {
-                    strcat(msg.msg, rteam[i].name);
-                }
+                strcat(msg.msg, rteam[i].name);
                 count++;
                 if (count % 5 == 0) {
                     strcat(msg.msg, "\n\0");
@@ -74,11 +72,7 @@ void do_work(struct User *user)
                 }
             }
             if (bteam[i].online) {
-                if (count == 0) { 
-                    strcpy(msg.msg, bteam[i].name);
-                } else {
-                    strcat(msg.msg, bteam[i].name);
-                }
+                strcat(msg.msg, bteam[i].name);
                 count++;
                 if (count % 5 == 0) {
                     strcat(msg.msg, "\n\0");
@@ -87,6 +81,11 @@ void do_work(struct User *user)
                 }
             }
         }
+        if (count % 5 != 0) {
+            strcat(msg.msg, "\n\0");
+        }
+        sprintf(buff, "用户总人数为：%d", count);
+        strcat(msg.msg, buff);
         send_to(user->name, &msg, user->fd);
     } else if (msg.type & CHAT_WALL) {
         printf("<%s> ~ %s\n", user->name ,msg.msg);
