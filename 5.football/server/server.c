@@ -17,6 +17,7 @@ struct User *rteam, *bteam;
 int port = 0;
 pthread_mutex_t rmutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t bmutex = PTHREAD_MUTEX_INITIALIZER;
+int count = 0;
 
 void server_down(int signnum)
 {

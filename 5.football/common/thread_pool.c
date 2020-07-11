@@ -7,7 +7,7 @@
 
 #include "head.h"
 
-extern int repollfd, bepollfd;
+extern int repollfd, bepollfd, count;
 extern struct User *bteam, *rteam;
 extern pthread_mutex_t bmutex, rmutex;
 
@@ -56,7 +56,39 @@ void do_work(struct User *user)
     bzero(&r_msg, sizeof(r_msg));
     recv(user->fd, (void *)&msg, sizeof(msg), 0);
     
-    if (msg.type & CHAT_WALL) {
+    if (msg.msg[0] == '#' && msg.msg[1] == '1') {
+        bzero(&msg, sizeof(msg));
+        msg.type = CHAT_SYS;
+        for (int i = 0; i < MAX; i++) {
+            if (rteam[i].online) {
+                if (count == 0) { 
+                    strcpy(msg.msg, rteam[i].name);
+                } else {
+                    strcat(msg.msg, rteam[i].name);
+                }
+                count++;
+                if (count % 5 == 0) {
+                    strcat(msg.msg, "\n\0");
+                } else {
+                    strcat(msg.msg, "  \0");
+                }
+            }
+            if (bteam[i].online) {
+                if (count == 0) { 
+                    strcpy(msg.msg, bteam[i].name);
+                } else {
+                    strcat(msg.msg, bteam[i].name);
+                }
+                count++;
+                if (count % 5 == 0) {
+                    strcat(msg.msg, "\n\0");
+                } else {
+                    strcat(msg.msg, "  \0");
+                }
+            }
+        }
+        send_to(user->name, &msg, user->fd);
+    } else if (msg.type & CHAT_WALL) {
         printf("<%s> ~ %s\n", user->name ,msg.msg);
         strcpy(msg.name, user->name);
         send_all(&msg);
