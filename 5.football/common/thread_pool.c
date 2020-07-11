@@ -61,29 +61,29 @@ void do_work(struct User *user)
         bzero(&msg, sizeof(msg));
         msg.type = CHAT_SYS;
         count = 0;
-        strcpy(msg.msg, "当前在线用户：\n\0");
+        strcpy(msg.msg, "当前在线用户：\n");
         for (int i = 0; i < MAX; i++) {
             if (rteam[i].online) {
                 strcat(msg.msg, rteam[i].name);
                 count++;
                 if (count % 5 == 0) {
-                    strcat(msg.msg, "\n\0");
+                    strcat(msg.msg, "\n");
                 } else {
-                    strcat(msg.msg, "  \0");
+                    strcat(msg.msg, "  ");
                 }
             }
             if (bteam[i].online) {
                 strcat(msg.msg, bteam[i].name);
                 count++;
                 if (count % 5 == 0) {
-                    strcat(msg.msg, "\n\0");
+                    strcat(msg.msg, "\n");
                 } else {
-                    strcat(msg.msg, "  \0");
+                    strcat(msg.msg, "  ");
                 }
             }
         }
         if (count % 5 != 0) {
-            strcat(msg.msg, "\n\0");
+            strcat(msg.msg, "\n");
         }
         sprintf(buff, "用户总人数为：%d", count);
         strcat(msg.msg, buff);
